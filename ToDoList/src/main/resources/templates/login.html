@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<!-- CSS読込 -->
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+	<!-- JS読込 -->
+	<script th:src="@{/webjars/jquery/jquery.min.js}" defer></script>
+	<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" defer></script>
+	<title>ログイン</title>
+</head>
+
+<body class="bg-light">
+	<div class="text-center">
+		<form method="post" th:action="@{/login}" class="form-login">
+			<h2>ログイン</h2>
+			<div class="alert alert-danger" role="alert" th:if="${param.error}">
+				ユーザーIDとパスワードが一致しません。
+			</div>
+			<!-- ユーザーID -->
+			<div class="mx-auto" style="width: 200px;" id="column1">
+				<div class="form-group">
+					<label for="username" class="sr-only">userId</label>
+					<input type="text" class="form-control " placeholder="ユーザーID" name="username" />
+				</div>
+			</div>
+			<!-- パスワード -->
+			<div class="mx-auto" style="width: 200px;" id="column2">
+				<div class="form-group">
+					<label for="password" class="sr-only">password</label>
+					<input type="text" class="form-control" placeholder="パスワード" name="password" />
+				</div>
+			</div>
+			<div class="mx-auto" style="width: 200px;" id="column3">
+				<input type="submit" value="ログイン" class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
+</body>
+
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+	<!-- JS読込 -->
+	<script th:src="@{/webjars/jquery/jquery.min.js}" defer></script>
+	<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" defer></script>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+		integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<meta charset="UTF-8">
+	<title>作業一覧画面</title>
+</head>
+
+<body>
+
+	<!-- ナビゲーションバー -->
+	<div layout:replace="~{layout/navbar::navbar (作業検索)}">
+	</div>
+
+	<!-- 一覧表示 -->
+
+	<div class="col-7">
+		<table class="table table-striped table-bordered">
+			<thead class="thead-light">
+				<tr>
+					<th class="th-width">項目名</th>
+					<th class="th-width">担当者</th>
+					<th class="th-width">登録日</th>
+					<th class="th-width">期限日</th>
+					<th class="th-width">完了日</th>
+					<th class="th-width">操作</th>
+
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="item: ${taskList}">
+
+					<td th:if="${#dates.createNow()}  gt ${item.expireDate}" class="alert alert-danger"
+						th:text="${item.taskName}"></td>
+					<td th:if="${#dates.createNow()}  lt ${item.expireDate}" th:text="${item.taskName}"></td>
+
+					<td th:if="${#dates.createNow()}  gt ${item.expireDate}" class="alert alert-danger"
+						th:text="${item.user.familyName} + ${item.user.firstName}"></td>
+					<td th:if="${#dates.createNow()}  lt ${item.expireDate}"
+						th:text="${item.user.familyName} + ${item.user.firstName}"></td>
+
+					<td th:if="${#dates.createNow()}  gt ${item.expireDate}" class="alert alert-danger"
+						th:text="${#dates.format(item.registrationDate, 'YYYY/MM/dd')}"></td>
+					<td th:if="${#dates.createNow()}  lt ${item.expireDate}"
+						th:text="${#dates.format(item.registrationDate, 'YYYY/MM/dd')}"></td>
+
+					<td th:if="${#dates.createNow()}  gt ${item.expireDate}" class="alert alert-danger"
+						th:text="${#dates.format(item.expireDate, 'YYYY/MM/dd')}"></td>
+					<td th:if="${#dates.createNow()}  lt ${item.expireDate}"
+						th:text="${#dates.format(item.expireDate, 'YYYY/MM/dd')}"></td>
+
+					<td th:if="${#dates.createNow()}  gt ${item.expireDate}" class="alert alert-danger"
+						th:text="${#dates.format(item.finshedDate, 'YYYY/MM/dd')}"></td>
+					<td th:if="${#dates.createNow()}  lt ${item.expireDate}"
+						th:text="${#dates.format(item.finshedDate, 'YYYY/MM/dd')}"></td>
+
+					<td th:if="${#dates.createNow()}  gt ${item.expireDate}" class="alert alert-danger">
+						<a class="btn btn-primary" type="submit" th:name="update"
+							th:href="@{'/task/update/' + ${item.id}}">
+							更新
+						</a>
+						<a class="btn btn-primary" type="submit" th:name="deleted"
+							th:href="@{'/task/deleted/' + ${item.id}}">
+							削除
+						</a>
+						<a class="btn btn-primary" type="submit" th:name="finshed"
+							th:href="@{'/task/finshed/' + ${item.id}}">
+							完了
+						</a>
+
+					<td th:if="${#dates.createNow()}  lt ${item.expireDate}">
+						<a class="btn btn-primary" type="submit" th:name="update"
+							th:href="@{'/task/update/' + ${item.id}}">
+							更新
+						</a>
+						<a class="btn btn-primary" type="submit" th:name="deleted"
+							th:href="@{'/task/deleted/' + ${item.id}}">
+							削除
+						</a>
+						<a class="btn btn-primary" type="submit" th:name="finshed"
+							th:href="@{'/task/finshed/' + ${item.id}}">
+							完了
+						</a>
+
+
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<a type="button" class="btn btn-light btn-outline-dark" href="/task/list">戻る</a>
+	</div>
+</body>
+
+</html>

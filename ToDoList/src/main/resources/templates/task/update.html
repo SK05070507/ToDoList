@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+	<!-- JS読込 -->
+	<script th:src="@{/webjars/jquery/jquery.min.js}" defer></script>
+	<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" defer></script>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+		integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<meta charset="UTF-8">
+	<title>作業更新画面</title>
+</head>
+
+<body>
+	<!-- ナビゲーションバー -->
+	<div layout:replace="~{layout/navbar::navbar (作業更新)}">
+	</div>
+	<!-- 登録フォーム -->
+	<form id="task-update-form" method="post" th:action="@{'/task/update/' +${taskId}}" class="form-update"
+		th:object="${updateForm}">
+		<div class="col-md-9 mb-3">
+			<div class="col-sm-6">
+				<div class="form-group row">
+					<label class="h col-sm-2 col-form-label " for="taskName">作業名</label>
+					<input type="text" class=" col-sm-8 form-control" th:value="${task.taskName}" name="taskName"
+						id="taskName" th:errorclass="is-invalid" />
+					<div class="invalid-feedback  offset-sm-2" th:errors="*{taskName}"></div>
+					<input type="hidden" id="id" name="id" th:value="${taskId}">
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group row">
+					<label class="h col-sm-2 col-form-label" for="user"> 担当名</label>
+					<select id="userName" name="userName" class="form-control col-sm-8">
+						<option th:each="item : ${userMap}" class="form-check-inline" th:value=${item.value}
+							th:text=${item.key}></option>
+					</select>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group row">
+					<label class="h col-sm-2 col-form-label" for="expireDate">期限日</label>
+					<input type="text" class="col-sm-8 form-control "
+						th:value="${#dates.format(task.expireDate, 'YYYY/MM/dd')}" name="expireDate" id="expireDate"
+						placeholder="yyyy/MM/dd" th:errorclass="is-invalid">
+					<div class="invalid-feedback offset-sm-2" th:errors="*{expireDate}"></div>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group row">
+					<label class="h col-sm-2 col-form-label" for="check">完了</label>
+					<div class="form-check form-check-inline">
+						<input class="form-check-input" type="checkbox" id="check" name="check" value="1"
+							th:checked="${task.finshedDate} != null">
+						<label class="form-check-label " for="check1">完了</label>
+					</div>
+				</div>
+			</div>
+			<input type="submit" value="更新" class="btn btn-light btn-outline-dark">
+			<a type="button" class="btn btn-light btn-outline-dark" href="/task/list">キャンセル</a>
+		</div>
+	</form>
+</body>
+
+</html>

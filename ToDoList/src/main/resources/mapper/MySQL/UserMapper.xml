@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Mapperとxmlのマッピング -->
+<mapper namespace="katachi.spring.exercise.repository.UserMapper">
+
+<resultMap type="katachi.spring.exercise.domain.user.model.MTask" id="task">
+<id property="id" column="id"/>
+<result property="id" column="id"/>
+<result property="userId" column="user_id"/>
+<result property="taskName" column="task_name"/>
+<result property="registrationDate" column="registration_date"/>
+<result property="expireDate" column="expire_date"/>
+<result property="finshedDate" column="finshed_date"/>
+<result property="isDeleted" column="is_deleted"/>
+<result property="createDateTime" column="create_date_time"/>
+<result property="updateDateTime" column="update_date_time"/>
+<association property="user"  resultMap="user" />
+</resultMap>
+
+<resultMap type="katachi.spring.exercise.domain.user.model.MUser" id="user">
+<id property="id" column="id"/>
+<result property="userId" column="user_id"/>
+<result property="familyName" column="family_name"/>
+<result property="firstName" column="first_name"/>
+</resultMap>
+
+<insert id="insertOne">
+    insert into tasks(
+        Id
+      , user_id
+      , task_name
+      , registration_date
+      , expire_date
+      , finshed_date
+      , is_deleted
+      , create_date_time
+      , update_date_time
+    )
+    values (
+        #{id}
+      , #{userId}
+      , #{taskName}
+      , #{registrationDate}
+      , #{expireDate}
+      , #{finshedDate}
+      , #{isDeleted}
+      , #{createDateTime}
+      , #{updateDateTime}
+    )
+  </insert>
+
+  <select id="findMany"  resultMap="task">
+  	select
+  		tasks.*
+  		, users.id as user_id
+  		, users.family_name
+  		, users.first_name
+  	from
+  		tasks
+  	join
+  		users
+  	on
+  		tasks.user_id = users.id
+	where
+		tasks.is_deleted = 0
+		<if test="name != null">
+	and
+		( CONCAT(users.family_name, users.first_name ) like '%${name}%'
+	or
+		tasks.task_name like '%${name}%' )
+		</if>
+	ORDER BY
+		tasks.expire_date
+  </select>
+
+<select id="findUser"  resultType="MUser">
+	select
+		 users.id as user_id
+		, family_name
+		, first_name
+	from
+		users
+	where
+		is_deleted = 0
+
+</select>
+
+<select id="findLoginUser"  resultType="MUser">
+	select
+		 *
+	from
+		users
+	where
+		is_deleted = 0
+		<if test="username != null">
+	and
+		users.user like '%${username}%'
+		</if>
+</select>
+
+<update id="updateOne">
+	update
+		tasks
+	set
+	 task_name = #{task.taskName}
+	 , registration_date = #{task.registrationDate}
+	 , expire_date = #{task.expireDate}
+     , finshed_date = #{task.finshedDate}
+     , is_deleted = #{task.isDeleted}
+     , update_date_time = #{task.updateDateTime}
+    where
+    	id = #{task.id}
+</update>
+
+<select id="findTask"  resultMap="task">
+	select
+  		tasks.*
+  		, users.id as user_id
+  		, users.family_name
+  		, users.first_name
+  	from
+  		tasks
+  	join
+  		users
+  	on
+  		tasks.user_id = users.id
+	where
+		tasks.is_deleted = 0
+
+	and
+		tasks.id = #{id}
+</select>
+
+<update id="deleteOne">
+	update
+		tasks
+	set
+		is_deleted = 1
+	where
+		id = #{Id}
+</update>
+
+<update id="finshedTask">
+	update
+		tasks
+	set
+	 	finshed_date = #{finshedDate}
+    where
+    	id = #{taskId}
+</update>
+
+<update id="removedTask">
+	update
+		tasks
+	set
+	 	finshed_date = null
+    where
+    	id = #{taskId}
+</update>
+  </mapper>
+

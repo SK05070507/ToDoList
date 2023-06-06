@@ -78,10 +78,8 @@ public class TaskListController {
 	@PostMapping("/task/input")
 	public String postInput(Model model, @ModelAttribute @Validated InputForm form, BindingResult bindingResult,
 			@ModelAttribute MUser user) {
-
 		//フォームから作業情報を取得
 		MTask task = modelMapper.map(form, MTask.class);
-
 		//入力チェック
 		if (bindingResult.hasErrors()) {
 			return getInput(model, form, user);
@@ -92,7 +90,6 @@ public class TaskListController {
 		task.setRegistrationDate(new Date());
 		task.setCreateDateTime(new Date());
 		task.setUpdateDateTime(new Date());
-
 		//作業完了フラグチェック
 		task.setIsDeleted(del);
 		if (form.getCheck() == null) {
@@ -102,7 +99,6 @@ public class TaskListController {
 		if (form.getCheck() == 1) {
 			task.setFinshedDate(new Date());
 		}
-
 		//登録処理
 		userService.inputTask(task);
 		return "redirect:/task/list";
@@ -138,12 +134,10 @@ public class TaskListController {
 	 */
 	@PostMapping("/task/update/{id}")
 	public String postUpdateTask(Model model, @ModelAttribute @Validated updateForm form, BindingResult bindingResult) {
-
 		//フォームから更新したい作業IDを取得
 		String id = form.getId();
 		//フォームから更新したい作業情報を取得
 		MTask task = modelMapper.map(form, MTask.class);
-
 		//入力チェック
 		if (bindingResult.hasErrors()) {
 			return getUpdateTask(id, model, form);
@@ -153,7 +147,6 @@ public class TaskListController {
 		int del = 0;
 		task.setRegistrationDate(new Date());
 		task.setUpdateDateTime(new Date());
-
 		//作業完了フラグチェック
 		task.setIsDeleted(del);
 		if (form.getCheck() == null) {

@@ -50,7 +50,6 @@ public class UserServiceImpl implements UserService {
 	public void finshedTask(Model model) {
 		mapper.finshedTask(model);
 	}
-
 	@Override
 	//作業完了取り消し
 	public void removedTask(String id) {

@@ -6,7 +6,6 @@ import lombok.Data;
 
 @Data
 public class MTask {
-
 	//作業ID
 	private String id; 
 	//担当者ID
@@ -28,6 +27,7 @@ public class MTask {
 	//担当者
 	private MUser user;
 	
+	//HTML側でのアラート表示判別
 	public boolean isAlert() {
 		Date date = new Date();
 		if (date.after(expireDate) && finshedDate == null) {

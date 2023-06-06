@@ -5,6 +5,7 @@
 <!-- Mapperとxmlのマッピング -->
 <mapper namespace="katachi.spring.exercise.repository.UserMapper">
 
+<!-- マッピング定義(作業) -->
 <resultMap type="katachi.spring.exercise.domain.user.model.MTask" id="task">
 <id property="id" column="id"/>
 <result property="id" column="id"/>
@@ -19,6 +20,7 @@
 <association property="user"  resultMap="user" />
 </resultMap>
 
+<!-- マッピング定義(担当者) -->
 <resultMap type="katachi.spring.exercise.domain.user.model.MUser" id="user">
 <id property="id" column="id"/>
 <result property="userId" column="user_id"/>
@@ -26,6 +28,7 @@
 <result property="firstName" column="first_name"/>
 </resultMap>
 
+<!-- 作業登録 -->
 <insert id="insertOne">
     insert into tasks(
         Id
@@ -51,6 +54,7 @@
     )
   </insert>
 
+<!-- 作業取得 -->
   <select id="findMany"  resultMap="task">
   	select
   		tasks.*
@@ -75,6 +79,7 @@
 		tasks.expire_date
   </select>
 
+<!-- 担当者取得 -->
 <select id="findUser"  resultType="MUser">
 	select
 		 users.id as user_id
@@ -84,9 +89,9 @@
 		users
 	where
 		is_deleted = 0
-
 </select>
 
+<!-- ログインユーザー取得 -->
 <select id="findLoginUser"  resultType="MUser">
 	select
 		 *
@@ -100,6 +105,7 @@
 		</if>
 </select>
 
+<!-- 作業更新 -->
 <update id="updateOne">
 	update
 		tasks
@@ -114,6 +120,7 @@
     	id = #{task.id}
 </update>
 
+<!-- 操作対象の作業を取得 -->
 <select id="findTask"  resultMap="task">
 	select
   		tasks.*
@@ -133,6 +140,7 @@
 		tasks.id = #{id}
 </select>
 
+<!-- 作業削除 -->
 <update id="deleteOne">
 	update
 		tasks
@@ -142,6 +150,7 @@
 		id = #{Id}
 </update>
 
+<!-- 作業完了 -->
 <update id="finshedTask">
 	update
 		tasks
@@ -151,6 +160,7 @@
     	id = #{taskId}
 </update>
 
+<!-- 作業完了取り消し -->
 <update id="removedTask">
 	update
 		tasks
@@ -159,5 +169,5 @@
     where
     	id = #{taskId}
 </update>
-  </mapper>
+</mapper>
 
